@@ -18,7 +18,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.ts', '.tsx', '.js'],
+    extensionAlias: {
+        '.js': ['.js', '.ts'],
+    },
     alias: {
       '@': path.resolve(__dirname, 'src'),
       '@core': path.resolve(__dirname, 'src/core'),
@@ -39,8 +42,10 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyPlugin({
       patterns: [
-        {from: path.resolve(__dirname, 'src/favicon.ico'),
-          to: path.resolve(__dirname, 'dist')},
+        { 
+          from: path.resolve(__dirname, 'src/favicon.ico'), 
+          to: path.resolve(__dirname, 'dist'), 
+        },
       ],
     }),
     new MiniCssExtractPlugin({
@@ -67,6 +72,16 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader',
+            options: {
+                'presets': ['@babel/preset-typescript']
+            }
+        },
+    },
     ],
   },
 }
